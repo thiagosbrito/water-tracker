@@ -1,72 +1,122 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Alert, KeyboardAvoidingView } from 'react-native';
 import React from 'react';
 import { Mail, Lock } from 'lucide-react-native';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import Button from '../../components/Button';
-import { Link } from 'expo-router';
-import GoogleLogo from '../../assets/svgs/google-icon.svg';
-import FacebookLogo from '../../assets/svgs/facebook-icon.svg';
+import { Link, router } from 'expo-router';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Controller, useForm } from 'react-hook-form';
+import { supabase } from '../../utils/supabase';
+import { Toast } from 'toastify-react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+const formSchema = z.object({
+    email: z.string().email('Please enter a valid email'),
+    password: z.string().min(8, 'Password must be at least 8 characters'),
+});
 
 export default function Page() {
+
+    const { control, handleSubmit } = useForm({
+        defaultValues: {
+            email: '',
+            password: '',
+        },
+        resolver: zodResolver(formSchema),
+    });
+
+    const onSubmit = async (data: any)=>{
+        const {
+            data: { session },
+            error,
+          } = await supabase.auth.signInWithPassword({
+            email: data.email,
+            password: data.password,
+        });
+        
+        if (error) {
+            Toast.error(error.message, 'top');
+        }
+
+        if (session) {
+            router.navigate('/(app)/Home');
+        }
+    }
+
     return (
-        <View className='gap-y-6'>
-            <View className='px-6 gap-y-12'>
-                <View className="pt-36">
-                    <Text className="text-4xl font-bold">Login</Text>
-                    <Text className="text-slate-400 text-xl">Securely login to your account</Text>
-                </View>
-                <View className="bg-slate-200 rounded-xl px-4 py-6 flex-row gap-x-2 shadow-md shadow-slate-300">
-                    <Mail size={20} />
-                    <TextInput className="w-full" placeholder="email@example.com" />
-                </View>
-                <View className="bg-slate-200 rounded-xl px-4 py-6 flex-row gap-x-2 shadow-md shadow-slate-300">
-                    <Lock size={20} />
-                    <TextInput className="w-full" secureTextEntry={true} placeholder="password" />
-                </View>
-                <View className='flex-row items-center'>
-                    <View>
-                        <BouncyCheckbox fillColor='#60a5fa' onPress={(isChecked: boolean) => {}} />
+        <KeyboardAvoidingView style={{flex: 1}}>
+            <View className='gap-y-6'>
+                <View className='px-6 gap-y-12'>
+                    <View className="pt-36">
+                        <Text className="text-4xl font-bold">Login</Text>
+                        <Text className="text-slate-400 text-xl">Securely login to your account</Text>
                     </View>
-                    <Text className='text-slate-400'>Remember me</Text>
-                </View>
-                <Button buttonStyle='bg-blue-500 text-white text-center py-4 rounded-lg shadow-xl shadow-blue-500' textStyle='font-bold uppercase text-xl text-center text-white'>
-                    Sign in
-                </Button>
-                <View>
-                    <Link href="/" className='text-center underline text-blue-600'>forgot password</Link>
-                </View>
-            </View>
-            <View className='px-6 gap-y-6'>
-                <View className='flex-row items-center justify-center gap-x-1'>
-                    <Text>-</Text>
-                    <Text>or continue with</Text>
-                    <Text>-</Text>
-                </View>
-                <View className='flex-row items-center self-center gap-x-4'>
+                    <View className="bg-slate-200 rounded-xl px-4 py-6 flex-row gap-x-2 shadow-md shadow-slate-300">
+                        <Mail size={20} />
+                        <Controller
+                            control={control}
+                            name={'email'}
+                            render={({ field: { value, onChange, onBlur }})=>(
+                                <TextInput
+                                    className="w-full"
+                                    keyboardType='email-address'
+                                    placeholder="email@example.com"
+                                    autoCapitalize='none'
+                                    value={value}
+                                    onChangeText={onChange}
+                                    onBlur={onBlur} />
+                            )} />
+                        
+                    </View>
+                    <View className="bg-slate-200 rounded-xl px-4 py-6 flex-row gap-x-2 shadow-md shadow-slate-300">
+                        <Lock size={20} />
+                        <Controller
+                            control={control}
+                            name={'password'}
+                            render={({ field: { value, onChange, onBlur }}) =>(
+                            <TextInput className="w-full"
+                                secureTextEntry={true}
+                                placeholder="password"
+                                value={value}
+                                onChangeText={onChange}
+                                onBlur={onBlur} />
+                        )} />
+                    </View>
+                    <View className='flex-row items-center'>
+                        <View>
+                            <BouncyCheckbox fillColor='#60a5fa' onPress={(isChecked: boolean) => {}} />
+                        </View>
+                        <Text className='text-slate-400'>Remember me</Text>
+                    </View>
                     <Button
-                        icon={() => <GoogleLogo width={20} height={20} />}
-                        buttonStyle='rounded-full border border-blue-200 px-3 py-2 flex-row items-center gap-x-2'
-                        textStyle='flex-row text-xl items-center gap-x-1'>
-                        <Text>Google</Text>
+                        buttonStyle='bg-blue-500 text-white text-center py-4 rounded-lg shadow-xl shadow-blue-500'
+                        textStyle='font-bold uppercase text-xl text-center text-white'
+                        onPress={handleSubmit(onSubmit)}>
+                        Sign in
                     </Button>
-                    <Button
-                        icon={() => <FacebookLogo width={20} height={20} />}
-                        buttonStyle='rounded-full border border-blue-200 px-3 py-2 flex-row items-center gap-x-2'
-                        textStyle='flex-row text-xl items-center gap-x-1'>
-                        <Text>Facebook</Text>
-                    </Button>
+                    <View>
+                        <Link href="/" className='text-center underline text-blue-600'>forgot password</Link>
+                    </View>
                 </View>
-                <View className='items-center justify-center gap-x-2 flex-row'>
-                    <Text className='font-bold text-lg text-slate-700'>Create An Account</Text>
-                    <Link href="/" className='text-lg text-blue-500 underline font-bold'>Sign Up</Link>
+                <View className='px-6 gap-y-6'>
+                    <View className='flex-row items-center justify-center gap-x-1'>
+                        <Text>-</Text>
+                        <Text>or continue with</Text>
+                        <Text>-</Text>
+                    </View>
+                    <View className='items-center justify-center gap-x-2 flex-row'>
+                        <Text className='font-bold text-lg text-slate-700'>Create An Account</Text>
+                        <Link href="/(auth)/SignUp" className='text-lg text-blue-500 underline font-bold'>Sign Up</Link>
+                    </View>
                 </View>
-                <View className='flex-row px-2 gap-x-2 flex-wrap'>
+                <View className='flex-row gap-x-2 flex-wrap mt-auto px-8'>
                     <Text>By clicking Continue, you agree to our</Text>
                     <Link href="/" className='text-blue-500 underline'>Terms of Service</Link>
                     <Text>and</Text>
                     <Link href="/" className='text-blue-500 underline'>Privacy Policy</Link>
                 </View>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
