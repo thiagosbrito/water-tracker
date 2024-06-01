@@ -1,12 +1,22 @@
-import { Link, router } from 'expo-router';
-import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { router } from 'expo-router';
+import { Text, View } from 'react-native';
 import { Step } from '../utils/interfaces/steps';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import BottleOfWater from '../assets/steps/bottleofwater_bro1.svg';
 import Button from '../components/Button';
+import { useEffect } from 'react';
+import { supabase } from '../utils/supabase';
 
 
 export default function Page() {
+    const auth = supabase.auth;
+
+    useEffect(() => {
+        auth.getSession().then(({data: {session}}) => {
+            if(session) {
+                router.navigate('/(tabs)');
+            }
+        });
+    }, [auth])
 
     const steps: Step[] = [
         {

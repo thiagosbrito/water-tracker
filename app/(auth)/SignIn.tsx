@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, TextInput, Alert, KeyboardAvoidingView } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Mail, Lock } from 'lucide-react-native';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import Button from '../../components/Button';
@@ -17,6 +17,7 @@ const formSchema = z.object({
 });
 
 export default function Page() {
+    const auth = supabase.auth;
 
     const { control, handleSubmit } = useForm({
         defaultValues: {
@@ -40,9 +41,17 @@ export default function Page() {
         }
 
         if (session) {
-            router.navigate('/(app)/Home');
+            router.navigate('/(tabs)');
         }
     }
+
+    useEffect(() => {
+        auth.getSession().then(({data: {session}}) => {
+            if(session) {
+                router.navigate('/(tabs)');
+            }
+        });
+    }, [auth])
 
     return (
         <KeyboardAvoidingView style={{flex: 1}}>
