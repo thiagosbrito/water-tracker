@@ -30,7 +30,17 @@ export default function TabLayout() {
               tabBarIcon: ({ color }) => <User size={28} color={color} />,
             }}
           />
+          <Tabs.Screen
+            name="SetGoal"
+            options={{
+              title: 'Set Your Goal',
+              headerShown: false,
+              href: null,
+              tabBarIcon: ({ color }) => <User size={28} color={color} />,
+            }}
+          />
         </Tabs>
+        
     </View>
   )
 }

@@ -1,10 +1,9 @@
-import { View, Text, ImageBackground, Image } from 'react-native'
-import LottieView from 'lottie-react-native';
-import WavesLargeAnimation from '../assets/animations/waves-large-animation.json';
-import DropsGoals from '../assets/svgs/drops-home-goal.svg';
+import { View, Text, Image } from 'react-native'
 import Wave from '../assets/svgs/waves.svg';
 import Button from './Button';
+import {router} from 'expo-router';
 const image = {uri: '../assets/images/home-goal-bg.png'}
+
 export default function HomeGoal() {
   return (
         <View className='bg-white rounded-xl shadow-xl h-64 shadow-slate-400 relative'>
@@ -13,6 +12,7 @@ export default function HomeGoal() {
                     <Text className='text-4xl font-bold'>11:00</Text>
                     <Text className='text-xl font-semibold text-slate-400'>200ml water(2 Glass)</Text>
                     <Button
+                        onPress={() => router.navigate('/(tabs)/SetGoal')}
                         buttonStyle='rounded-full w-6/12 mt-auto shadow-md shadow-slate-400/25 px-4 py-2 bg-white'
                         textStyle='font-semibold text-slate-600 text-center text-xl font-poppins'>
                         Add Your Goal

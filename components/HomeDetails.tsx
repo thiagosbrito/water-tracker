@@ -19,18 +19,18 @@ export default function HomeDetails() {
                 </View>
             </View>
             <View className='gap-y-4 flex-1'>
-                <View className='bg-white rounded-xl px-6 py-4 w-64 -ml-5 gap-y-3 shadow-md shadow-gray-300'>
+                <View className='bg-white rounded-xl px-6 py-4 w-64 gap-y-3 shadow-md shadow-gray-300 absolute right-0'>
                     <View className='flex-row items-center gap-x-4'>
                         <Text className='text-xl text-slate-400 font-bold'>{now}</Text>
                         <View className='h-2 w-24 bg-blue-400 rounded-full'></View>
                     </View>
-                    <View className='flex-row items-center gap-x-4'>
+                    <View className='flex-row items-center gap-x-4 mt-auto'>
                         <Coffee size={24} color={'red'} />
                         <Text className='font-bold text-xl'>200 ml</Text>
                         <Text className='ml-auto font-bold text-xl text-slate-400'>100%</Text>
                     </View>
                 </View>
-                <View className="ml-auto bg-white rounded-xl px-6 py-4 w-48 gap-y-2 shadow-md shadow-gray-300">
+                <View className="ml-auto bg-white rounded-xl px-6 py-4 w-48 gap-y-2 shadow-md shadow-gray-300 mt-32">
                     <Text className='text-xl text-slate-400 font-semibold'>Target</Text>
                     <Text className='font-bold text-xl'>2000 ml</Text>
                 </View>

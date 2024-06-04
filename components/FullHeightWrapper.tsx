@@ -1,10 +1,12 @@
-import { View, Text } from 'react-native'
+import { View, Text, ViewProps } from 'react-native'
 import { ReactNode } from 'react'
 
-export default function FullHeightWrapper({children}: {children: ReactNode}) {
-  return (
-    <View className='flex-1 bg-slate-200 px-8 pt-36'>
-        {children}
-    </View>
-  )
+type FullHeightWrapperProps = { bgColor?: string } & ViewProps;
+export default function FullHeightWrapper(props: FullHeightWrapperProps) {
+  	const { children, bgColor, ...restProps } = props;
+  	return (
+    	<View style={{backgroundColor: bgColor}} {...restProps}>
+        	{children}
+    	</View>
+  	)
 }
