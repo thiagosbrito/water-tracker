@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import { Tabs } from 'expo-router';
-import { Home, Settings, User } from 'lucide-react-native'
+import { BarChartBig, CirclePlus, Home, Settings, User } from 'lucide-react-native'
 
 export default function TabLayout() {
   return (
@@ -15,6 +15,22 @@ export default function TabLayout() {
             }} 
           />
           <Tabs.Screen
+            name="Analytics"
+            options={{
+              title: 'Analytics',
+              headerShown: false,
+              tabBarIcon: ({ color }) => <BarChartBig size={28} className="" color={color} />,
+            }} 
+          />
+          <Tabs.Screen
+            name="SetGoal"
+            options={{
+              title: 'Set Your Goal',
+              headerShown: false,
+              tabBarIcon: ({ color }) => <CirclePlus size={46} color={color} />,
+            }}
+          />
+          <Tabs.Screen
             name="Settings"
             options={{
               title: 'Settings',
@@ -27,15 +43,6 @@ export default function TabLayout() {
             options={{
               title: 'Profile',
               headerShown: false,
-              tabBarIcon: ({ color }) => <User size={28} color={color} />,
-            }}
-          />
-          <Tabs.Screen
-            name="SetGoal"
-            options={{
-              title: 'Set Your Goal',
-              headerShown: false,
-              href: null,
               tabBarIcon: ({ color }) => <User size={28} color={color} />,
             }}
           />

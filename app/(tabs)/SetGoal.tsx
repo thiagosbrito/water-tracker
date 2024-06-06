@@ -61,7 +61,6 @@ export default function Tab() {
                 <View className='px-8 pt-14 gap-y-9'>
 
                     <View className='h-14 w-full flex-row items-center'>
-                            <ArrowLeft size={28} className='text-slate-400' />
                             <Text className='text-3xl flex-1 font-bold text-center'>Set Your Goal</Text>
                     </View>
                     <View className='bg-blue-300 px-4 py-6 items-center justify-center mx-auto rounded-md shadow-lg shadow-blue-400'>
